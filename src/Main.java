@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -28,26 +30,82 @@ class FullTimeEmployee extends Employee{
 
     private double monthlySalary;
 
-    public FullTimeEmployee(String name, int id) {
+    public FullTimeEmployee(String name, int id,double monthlySalary) {
         super(name, id);
+        this.monthlySalary = monthlySalary;
+    }
+
+
+    @Override
+    double calculateSalary() {
+        return monthlySalary;
+    }
+}
+
+class PartTimeEmployee extends Employee {
+
+    private int hoursWorked;
+
+    private double hourlyRate;
+
+    public PartTimeEmployee(String name, int id, int hoursWorked, double hourlyRate) {
+        super(name, id);
+        this.hoursWorked = hoursWorked;
+        this.hourlyRate = hourlyRate;
     }
 
     @Override
     double calculateSalary() {
-        return 0;
+        return hoursWorked * hourlyRate;
+    }
+}
+
+class PayrollSystem{
+    private ArrayList<Employee> employeeList;
+
+    public PayrollSystem(){
+        employeeList = new ArrayList<>();
+    }
+
+    public void addEmployee(Employee employee){
+        employeeList.add(employee);
+    }
+
+    public void removeEmployee(int id){
+//        employeeList.remove(id);
+        Employee employeeToRemove = null;
+        for (Employee employee : employeeList){
+            if (employee.getId()==id){
+                employeeToRemove = employee;
+                break;
+            }
+        }
+        if (employeeToRemove !=null){
+            employeeList.remove(employeeToRemove);
+        }
+    }
+
+    public void  displayEmployee(){
+        for (Employee employee: employeeList){
+            System.out.println(employee);
+        }
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        PayrollSystem payrollSystem = new PayrollSystem();
+        FullTimeEmployee emp1 = new FullTimeEmployee("Atharv",1,33300);
+        PartTimeEmployee emp2 = new PartTimeEmployee("virat",2,23,200);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        payrollSystem.addEmployee(emp1);
+        payrollSystem.addEmployee(emp2);
+
+        System.out.println("Initial employee details");
+        payrollSystem.displayEmployee();
+        System.out.println("Removing employee");
+        payrollSystem.removeEmployee(2);
+        System.out.println("Remaining employee details: ");
+        payrollSystem.displayEmployee();
     }
 }
